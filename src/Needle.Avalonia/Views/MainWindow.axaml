@@ -1,0 +1,942 @@
+<views:ChromeWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Needle.Avalonia.ViewModels"
+        xmlns:views="using:Needle.Avalonia.Views"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Needle.Avalonia.Views.MainWindow"
+        x:Name="Root"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/app-icon.ico"
+        Title="{Binding Document.Title}"
+        Width="{Binding DisplaySettings.MainWindowWidth, Mode=TwoWay}"
+        Height="{Binding DisplaySettings.MainWindowHeight, Mode=TwoWay}"
+        MinWidth="900"
+        MinHeight="560"
+        WindowDecorations="None"
+        CanResize="True"
+        Topmost="{Binding DisplaySettings.IsAlwaysOnTop}"
+        Background="{StaticResource NeedleWindowBrush}"
+        SizeChanged="OnWindowSizeChanged"
+        PositionChanged="OnWindowPositionChanged"
+        Opened="OnWindowOpened"
+        Closing="OnWindowClosing">
+
+    <views:ChromeWindow.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedleTopBarBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedleTabBarBrush" Color="#232528" />
+        <SolidColorBrush x:Key="NeedlePanelBrush" Color="#242629" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleEditorBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleHoverBrush" Color="#383B40" />
+        <SolidColorBrush x:Key="NeedleThemeButtonBrush" Color="#34373D" />
+        <SolidColorBrush x:Key="NeedleThemeButtonHoverBrush" Color="#41454D" />
+        <SolidColorBrush x:Key="NeedleTabActiveBrush" Color="#26282C" />
+        <SolidColorBrush x:Key="NeedleFlyoutBrush" Color="#25272B" />
+        <SolidColorBrush x:Key="NeedleFlyoutSecondaryBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedleFlyoutPrimaryHoverBrush" Color="#467FF2" />
+        <SolidColorBrush x:Key="NeedleLogSelectedLineBrush" Color="#264F78" />
+        <SolidColorBrush x:Key="NeedleLogTextSelectionBrush" Color="#3A6EA5" />
+        <SolidColorBrush x:Key="NeedleLogBookmarkBrush" Color="#2B2412" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#8B949E" />
+        <SolidColorBrush x:Key="NeedleAccentBrush" Color="#3574F0" />
+        <SolidColorBrush x:Key="NeedleSuccessBrush" Color="#6AAB73" />
+    </views:ChromeWindow.Resources>
+
+    <views:ChromeWindow.Styles>
+        <Style Selector="Button.chrome-button">
+            <Setter Property="Width" Value="40" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleMutedTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.chrome-button:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleHoverBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+        </Style>
+        <Style Selector="Button.close-button:pointerover">
+            <Setter Property="Background" Value="#C42B1C" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="Button.tool-button">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Width" Value="34" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleMutedTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.tool-button:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleHoverBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+        </Style>
+        <Style Selector="Button.toolbar-icon-button">
+            <Setter Property="Height" Value="28" />
+            <Setter Property="Width" Value="30" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleMutedTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.toolbar-icon-button:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleHoverBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+        </Style>
+        <Style Selector="Button.footer-update-button">
+            <Setter Property="Width" Value="36" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="MinHeight" Value="20" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="Background" Value="{StaticResource NeedleThemeButtonBrush}" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.footer-update-button:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleThemeButtonHoverBrush}" />
+        </Style>
+        <Style Selector="CheckBox.compact-check">
+            <Setter Property="Foreground" Value="{StaticResource NeedleMutedTextBrush}" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="TextBlock.flyout-title">
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="TextBlock.flyout-caption">
+            <Setter Property="Foreground" Value="{StaticResource NeedleMutedTextBrush}" />
+            <Setter Property="FontSize" Value="11" />
+        </Style>
+        <Style Selector="Button.flyout-action">
+            <Setter Property="Height" Value="32" />
+            <Setter Property="Padding" Value="10,0" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Button.flyout-action:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleThemeButtonBrush}" />
+        </Style>
+        <Style Selector="Button.flyout-primary">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Background" Value="{StaticResource NeedleAccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.flyout-primary:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleFlyoutPrimaryHoverBrush}" />
+        </Style>
+        <Style Selector="Button.flyout-secondary">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Padding" Value="12,0" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Background" Value="{StaticResource NeedleFlyoutSecondaryBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.flyout-secondary:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleThemeButtonBrush}" />
+        </Style>
+        <Style Selector="Button.theme-button">
+            <Setter Property="Background" Value="{StaticResource NeedleThemeButtonBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+        </Style>
+        <Style Selector="Button.theme-button:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleThemeButtonHoverBrush}" />
+        </Style>
+        <Style Selector="Border.editor-tab">
+            <Setter Property="Height" Value="36" />
+            <Setter Property="MinWidth" Value="132" />
+            <Setter Property="Background" Value="{StaticResource NeedleTabBarBrush}" />
+        </Style>
+        <Style Selector="Border.editor-tab.active">
+            <Setter Property="Background" Value="{StaticResource NeedleTabActiveBrush}" />
+        </Style>
+        <Style Selector="Button.editor-tab-title">
+            <Setter Property="Height" Value="33" />
+            <Setter Property="Padding" Value="12,0,8,0" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.editor-tab-title:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleFlyoutSecondaryBrush}" />
+        </Style>
+        <Style Selector="Button.editor-tab-close">
+            <Setter Property="Width" Value="20" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleMutedTextBrush}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.editor-tab-close:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleHoverBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </views:ChromeWindow.Styles>
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid Background="{StaticResource NeedleWindowBrush}">
+    <DockPanel Background="{StaticResource NeedleWindowBrush}">
+        <Border DockPanel.Dock="Top"
+                Height="38"
+                Background="{StaticResource NeedleTopBarBrush}"
+                BorderThickness="0,0,0,1"
+                BorderBrush="{StaticResource NeedleBorderBrush}">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Stretch">
+                    <Button x:Name="MainMenuButton"
+                            Classes="tool-button"
+                            Width="40"
+                            Height="38"
+                            CornerRadius="0"
+                            ToolTip.Tip="Menu"
+                            Click="OnMainMenuButtonClicked">
+                        <PathIcon Width="18"
+                                  Height="18"
+                                  Data="M4,6 L20,6 L20,8 L4,8 Z M4,11 L20,11 L20,13 L4,13 Z M4,16 L20,16 L20,18 L4,18 Z" />
+                    </Button>
+                </StackPanel>
+
+                <Border Grid.Column="1"
+                        Background="Transparent"
+                        PointerPressed="OnTitleBarPointerPressed">
+                    <TextBlock Text="{Binding Document.Title}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}"
+                               FontSize="12" />
+                </Border>
+
+                <StackPanel Grid.Column="2"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Stretch">
+                    <Button Classes="tool-button theme-button"
+                            ToolTip.Tip="Toggle theme"
+                            Click="OnToggleThemeClicked">
+                        <PathIcon x:Name="ThemeIcon"
+                                  Width="16"
+                                  Height="16"
+                                  Data="M12,3 C9.2,4.2 7.3,6.9 7.3,10 C7.3,14.4 10.9,18 15.3,18 C16.3,18 17.3,17.8 18.2,17.4 C16.8,19.6 14.3,21 11.5,21 C7.1,21 3.5,17.4 3.5,13 C3.5,8.4 7.1,4.6 12,3 Z" />
+                    </Button>
+                    <Border Width="1"
+                            Height="18"
+                            Margin="4,0,4,0"
+                            VerticalAlignment="Center"
+                            Background="{StaticResource NeedleBorderBrush}" />
+                    <Button Classes="tool-button"
+                            ToolTip.Tip="Settings"
+                            Click="OnSettingsClicked">
+                        <PathIcon Width="16"
+                                  Height="16"
+                                  Data="M19.4,13.5 C19.5,13 19.5,12.5 19.5,12 C19.5,11.5 19.5,11 19.4,10.5 L21.2,9.1 L19.2,5.7 L17.1,6.6 C16.3,6 15.5,5.5 14.6,5.2 L14.3,3 L10.3,3 L10,5.2 C9.1,5.5 8.3,6 7.5,6.6 L5.4,5.7 L3.4,9.1 L5.2,10.5 C5.1,11 5.1,11.5 5.1,12 C5.1,12.5 5.1,13 5.2,13.5 L3.4,14.9 L5.4,18.3 L7.5,17.4 C8.3,18 9.1,18.5 10,18.8 L10.3,21 L14.3,21 L14.6,18.8 C15.5,18.5 16.3,18 17.1,17.4 L19.2,18.3 L21.2,14.9 Z M12.3,9 A3,3 0,1 1,12.3,15 A3,3 0,1 1,12.3,9 Z" />
+                    </Button>
+                    <Button Classes="chrome-button"
+                            ToolTip.Tip="Minimize"
+                            Click="OnMinimizeClicked">
+                        <PathIcon Width="12"
+                                  Height="12"
+                                  Data="M4,11 L20,11 L20,13 L4,13 Z" />
+                    </Button>
+                    <Button Classes="chrome-button"
+                            ToolTip.Tip="Maximize"
+                            Click="OnMaximizeClicked">
+                        <PathIcon Width="12"
+                                  Height="12"
+                                  Data="M6,6 L18,6 L18,18 L6,18 Z M8,8 L8,16 L16,16 L16,8 Z" />
+                    </Button>
+                    <Button Classes="chrome-button close-button"
+                            ToolTip.Tip="Close"
+                            Click="OnCloseWindowClicked">
+                        <PathIcon Width="12"
+                                  Height="12"
+                                  Data="M6.4,5 L12,10.6 L17.6,5 L19,6.4 L13.4,12 L19,17.6 L17.6,19 L12,13.4 L6.4,19 L5,17.6 L10.6,12 L5,6.4 Z" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom"
+                Padding="12,6"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{StaticResource NeedleBorderBrush}"
+                Background="{StaticResource NeedleTopBarBrush}">
+            <Grid ColumnDefinitions="*,Auto">
+                <TextBlock Grid.Column="0"
+                           Text="{Binding Document.Status}"
+                           Foreground="{StaticResource NeedleMutedTextBrush}" />
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            Spacing="5"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Updates.CurrentVersionDisplay}"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <TextBlock Text="("
+                               IsVisible="{Binding Updates.HasAvailableUpdate}"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <TextBlock Text="{Binding Updates.AvailableUpdateText}"
+                               IsVisible="{Binding Updates.HasAvailableUpdate}"
+                               Foreground="{StaticResource NeedleSuccessBrush}" />
+                    <TextBlock Text=")"
+                               IsVisible="{Binding Updates.HasAvailableUpdate}"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <Button Classes="footer-update-button"
+                            Margin="4,0,0,0"
+                            IsVisible="{Binding Updates.HasAvailableUpdate}"
+                            IsEnabled="{Binding !Updates.IsUpdating}"
+                            ToolTip.Tip="Download and apply update"
+                            Command="{Binding Updates.ApplyUpdateCommand}">
+                        <Grid Width="36"
+                              Height="20">
+                            <PathIcon Width="14"
+                                      Height="14"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      IsVisible="{Binding Updates.ShowUpdateIcon}"
+                                      Data="M11,3 L13,3 L13,13 L17,9 L18.5,10.5 L12,17 L5.5,10.5 L7,9 L11,13 Z M5,19 L19,19 L19,21 L5,21 Z" />
+                            <TextBlock Text="{Binding Updates.UpdateButtonText}"
+                                       IsVisible="{Binding Updates.IsUpdating}"
+                                       FontSize="10"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid RowDefinitions="Auto,Auto,*">
+            <views:LogTabsView Grid.Row="0" />
+
+            <Border Grid.Row="1"
+                    Padding="10,6"
+                    Background="{StaticResource NeedlePanelBrush}"
+                    BorderThickness="0,0,0,1"
+                    BorderBrush="{StaticResource NeedleBorderBrush}">
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto,Auto,Auto,Auto"
+                      ColumnSpacing="8">
+                    <StackPanel Grid.Column="0"
+                                Orientation="Horizontal"
+                                Spacing="4">
+                    <TextBox PlaceholderText="Search"
+                             Width="180"
+                             Text="{Binding SearchFilter.SearchText, Mode=TwoWay}" />
+                        <Button Classes="toolbar-icon-button"
+                                ToolTip.Tip="Previous match"
+                                Command="{Binding SearchPreviousCommand}">
+                            <PathIcon Width="14"
+                                      Height="14"
+                                      Data="M15,6 L9,12 L15,18 L13.6,19.4 L6.2,12 L13.6,4.6 Z" />
+                        </Button>
+                        <Button Classes="toolbar-icon-button"
+                                ToolTip.Tip="Next match"
+                                Command="{Binding SearchNextCommand}">
+                            <PathIcon Width="14"
+                                      Height="14"
+                                      Data="M9,6 L15,12 L9,18 L10.4,19.4 L17.8,12 L10.4,4.6 Z" />
+                        </Button>
+                    </StackPanel>
+
+                    <Border Grid.Column="1"
+                            Width="9"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch">
+                        <Border Width="1"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource NeedleBorderBrush}" />
+                    </Border>
+
+                    <Button Grid.Column="2"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Filter">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M4,5 L20,5 L14,12 L14,19 L10,21 L10,12 Z" />
+                        <Button.Flyout>
+                            <Flyout>
+                                <Border Width="320"
+                                        Padding="14"
+                                        Background="{StaticResource NeedleFlyoutBrush}"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6">
+                                    <StackPanel Spacing="12">
+                                        <StackPanel Spacing="3">
+                                            <TextBlock Classes="flyout-title"
+                                                       Text="Filter" />
+                                            <TextBlock Classes="flyout-caption"
+                                                       Text="Show only lines matching this pattern." />
+                                        </StackPanel>
+                                        <TextBox Height="32"
+                                                 PlaceholderText="Text or regex"
+                                                 Text="{Binding SearchFilter.FilterText, Mode=TwoWay}" />
+                                        <Border Height="1"
+                                                Background="{StaticResource NeedleBorderBrush}" />
+                                        <Grid ColumnDefinitions="*,*"
+                                              ColumnSpacing="10">
+                                            <CheckBox Grid.Column="0"
+                                                      Classes="compact-check"
+                                                      Content="Match case"
+                                                      IsChecked="{Binding SearchFilter.IsSearchCaseSensitive}" />
+                                            <CheckBox Grid.Column="1"
+                                                      Classes="compact-check"
+                                                      Content="Regex"
+                                                      IsChecked="{Binding SearchFilter.IsSearchRegex}" />
+                                        </Grid>
+                                        <Grid ColumnDefinitions="*,Auto,Auto"
+                                              ColumnSpacing="8">
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding SearchFilter.FilterStatus}"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Foreground="{StaticResource NeedleMutedTextBrush}" />
+                                            <Button Grid.Column="1"
+                                                    Classes="flyout-secondary"
+                                                    Content="Clear"
+                                                    Command="{Binding ClearFilterCommand}" />
+                                            <Button Grid.Column="2"
+                                                    Classes="flyout-primary"
+                                                    Content="Apply"
+                                                    Command="{Binding ApplyFilterCommand}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                    <Border Grid.Column="3"
+                            Width="9"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch">
+                        <Border Width="1"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource NeedleBorderBrush}" />
+                    </Border>
+
+                    <Button Grid.Column="4"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Exclude lines">
+                        <Viewbox Width="16"
+                                 Height="16">
+                            <Canvas Width="24"
+                                    Height="24">
+                                <Path Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                      StrokeThickness="2"
+                                      StrokeLineCap="Round"
+                                      Data="M10.7,5.1 C15.7,4.4 19.6,6.6 22,12 C21.6,13 21,14 20.3,14.8" />
+                                <Path Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                      StrokeThickness="2"
+                                      StrokeLineCap="Round"
+                                      Data="M14.1,14.2 C13,15.3 11.1,15.3 9.9,14.1 C8.7,12.9 8.7,11 9.8,9.9" />
+                                <Path Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                      StrokeThickness="2"
+                                      StrokeLineCap="Round"
+                                      Data="M17.5,17.5 C12.4,20.3 5.2,18.4 2,12 C3.1,9.8 4.6,8 6.5,6.5" />
+                                <Path Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}"
+                                      StrokeThickness="2"
+                                      StrokeLineCap="Round"
+                                      Data="M2,2 L22,22" />
+                            </Canvas>
+                        </Viewbox>
+                        <Button.Flyout>
+                            <Flyout>
+                                <Border Width="360"
+                                        Padding="14"
+                                        Background="{StaticResource NeedleFlyoutBrush}"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6">
+                                    <StackPanel Spacing="12">
+                                        <StackPanel Spacing="3">
+                                            <TextBlock Classes="flyout-title"
+                                                       Text="Exclude" />
+                                            <TextBlock Classes="flyout-caption"
+                                                       Text="Hide lines containing any of these strings in this tab." />
+                                        </StackPanel>
+                                        <Grid ColumnDefinitions="*,Auto"
+                                              ColumnSpacing="8">
+                                            <TextBox Grid.Column="0"
+                                                     Height="32"
+                                                     PlaceholderText="Text to hide"
+                                                     Text="{Binding ExcludeRules.PendingPattern, Mode=TwoWay}" />
+                                            <Button Grid.Column="1"
+                                                    Classes="flyout-primary"
+                                                    Content="Add"
+                                                    Command="{Binding ExcludeRules.AddRuleCommand}" />
+                                        </Grid>
+                                        <Border Height="1"
+                                                Background="{StaticResource NeedleBorderBrush}" />
+                                        <ItemsControl ItemsSource="{Binding ExcludeRules.Rules}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="vm:ExcludeRuleViewModel">
+                                                    <Border Padding="8,6"
+                                                            Margin="0,0,0,6"
+                                                            Background="{StaticResource NeedleFlyoutSecondaryBrush}"
+                                                            BorderBrush="{StaticResource NeedleBorderBrush}"
+                                                            BorderThickness="1"
+                                                            CornerRadius="5">
+                                                        <Grid ColumnDefinitions="*,Auto"
+                                                              ColumnSpacing="8">
+                                                            <TextBlock Grid.Column="0"
+                                                                       Text="{Binding Pattern}"
+                                                                       VerticalAlignment="Center"
+                                                                       TextTrimming="CharacterEllipsis"
+                                                                       Foreground="{StaticResource NeedleTextBrush}" />
+                                                            <Button Grid.Column="1"
+                                                                    Classes="toolbar-icon-button"
+                                                                    ToolTip.Tip="Remove exclude rule"
+                                                                    Command="{Binding RemoveCommand}">
+                                                                <PathIcon Width="10"
+                                                                          Height="10"
+                                                                          Data="M6.4,5 L12,10.6 L17.6,5 L19,6.4 L13.4,12 L19,17.6 L17.6,19 L12,13.4 L6.4,19 L5,17.6 L10.6,12 L5,6.4 Z" />
+                                                            </Button>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <Grid ColumnDefinitions="*,Auto"
+                                              ColumnSpacing="8">
+                                            <TextBlock Grid.Column="0"
+                                                       Text="{Binding ExcludeRules.Status}"
+                                                       VerticalAlignment="Center"
+                                                       TextTrimming="CharacterEllipsis"
+                                                       Foreground="{StaticResource NeedleMutedTextBrush}" />
+                                            <Button Grid.Column="1"
+                                                    Classes="flyout-secondary"
+                                                    Content="Clear"
+                                                    Command="{Binding ExcludeRules.ClearRulesCommand}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                    <Border Grid.Column="5"
+                            Width="9"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch">
+                        <Border Width="1"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource NeedleBorderBrush}" />
+                    </Border>
+
+                    <Button Grid.Column="6"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Highlight rules"
+                            Click="OnHighlightSettingsClicked">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M5,4 L19,4 L19,8 L17,8 L17,6 L13,6 L13,18 L15,18 L15,20 L9,20 L9,18 L11,18 L11,6 L7,6 L7,8 L5,8 Z" />
+                    </Button>
+
+                    <Button Grid.Column="7"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Trigger rules"
+                            Click="OnTriggerSettingsClicked">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M13,2 L5,13 L11,13 L9,22 L19,10 L13,10 Z" />
+                    </Button>
+
+                    <Border Grid.Column="8"
+                            Width="9"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch">
+                        <Border Width="1"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource NeedleBorderBrush}" />
+                    </Border>
+
+                    <Button Grid.Column="9"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Show in Explorer"
+                            Command="{Binding ShowInExplorerCommand}">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M4,6 L9,6 L11,8 L20,8 L20,18 L4,18 Z M6,10 L6,16 L18,16 L18,10 Z" />
+                    </Button>
+
+                    <Button Grid.Column="10"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Open in Editor"
+                            Command="{Binding OpenInEditorCommand}">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M6,4 L15,4 L19,8 L19,20 L6,20 Z M14,6 L14,9 L17,9 Z M8,12 L17,12 L17,14 L8,14 Z M8,16 L15,16 L15,18 L8,18 Z" />
+                    </Button>
+
+                    <Border Grid.Column="11"
+                            Width="9"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch">
+                        <Border Width="1"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource NeedleBorderBrush}" />
+                    </Border>
+
+                    <Button Grid.Column="12"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Clear log"
+                            IsEnabled="{Binding Document.IsDocumentOpen}"
+                            Click="OnClearLogClicked">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M8,6 L8,4 L16,4 L16,6 L20,6 L20,8 L18,8 L17,20 L7,20 L6,8 L4,8 L4,6 Z M9,8 L10,18 L14,18 L15,8 Z" />
+                    </Button>
+
+                    <StackPanel Grid.Column="13"
+                                Orientation="Horizontal"
+                                Spacing="12">
+                        <TextBlock Text="{Binding SearchFilter.SearchStatus}"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}" />
+                        <TextBlock Text="{Binding SearchFilter.FilterStatus}"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}" />
+                        <TextBlock Text="{Binding ExcludeRules.Status}"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="14"
+                                Orientation="Horizontal"
+                                Spacing="4">
+                        <Button Classes="toolbar-icon-button"
+                                ToolTip.Tip="Bookmarks"
+                                IsEnabled="{Binding HasBookmarks}">
+                            <PathIcon Width="15"
+                                      Height="15"
+                                      Data="M7,4 L17,4 L17,20 L12,17 L7,20 Z" />
+                            <Button.Flyout>
+                                <Flyout>
+                                    <Border Width="240"
+                                            Padding="10"
+                                            Background="{StaticResource NeedleFlyoutBrush}"
+                                            BorderBrush="{StaticResource NeedleBorderBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="6">
+                                        <StackPanel Spacing="8">
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <TextBlock Grid.Column="0"
+                                                           Classes="flyout-title"
+                                                           Text="Bookmarks" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Document.BookmarkCountText}"
+                                                           Foreground="#E0A800"
+                                                           FontWeight="SemiBold"
+                                                           VerticalAlignment="Center" />
+                                            </Grid>
+                                            <TextBlock Text="{Binding SelectedBookmarkText}"
+                                                       Foreground="{StaticResource NeedleMutedTextBrush}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <Grid ColumnDefinitions="*,*,*,*"
+                                                  ColumnSpacing="6">
+                                                <Button Grid.Column="0"
+                                                        Classes="toolbar-icon-button"
+                                                        HorizontalAlignment="Stretch"
+                                                        ToolTip.Tip="Previous bookmark"
+                                                        Command="{Binding PreviousBookmarkCommand}">
+                                                    <PathIcon Width="15"
+                                                              Height="15"
+                                                              Data="M12,5 L19,12 L17.6,13.4 L13,8.8 L13,21 L11,21 L11,8.8 L6.4,13.4 L5,12 Z" />
+                                                </Button>
+                                                <Button Grid.Column="1"
+                                                        Classes="toolbar-icon-button"
+                                                        HorizontalAlignment="Stretch"
+                                                        ToolTip.Tip="Next bookmark"
+                                                        Command="{Binding NextBookmarkCommand}">
+                                                    <PathIcon Width="15"
+                                                              Height="15"
+                                                              Data="M11,3 L13,3 L13,15.2 L17.6,10.6 L19,12 L12,19 L5,12 L6.4,10.6 L11,15.2 Z" />
+                                                </Button>
+                                                <Button Grid.Column="2"
+                                                        Classes="toolbar-icon-button"
+                                                        HorizontalAlignment="Stretch"
+                                                        ToolTip.Tip="Remove current bookmark"
+                                                        Command="{Binding RemoveSelectedBookmarkCommand}">
+                                                    <PathIcon Width="15"
+                                                              Height="15"
+                                                              Data="M8,6 L8,4 L16,4 L16,6 L20,6 L20,8 L18,8 L17,20 L7,20 L6,8 L4,8 L4,6 Z M9,8 L10,18 L14,18 L15,8 Z" />
+                                                </Button>
+                                                <Button Grid.Column="3"
+                                                        Classes="toolbar-icon-button"
+                                                        HorizontalAlignment="Stretch"
+                                                        ToolTip.Tip="Clear bookmarks"
+                                                        Command="{Binding ClearBookmarksCommand}">
+                                                    <PathIcon Width="15"
+                                                              Height="15"
+                                                              Data="M5,5 L19,5 L19,7 L5,7 Z M7,9 L17,9 L17,19 L7,19 Z" />
+                                                </Button>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+
+                    <Button Grid.Column="15"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Triggered lines"
+                            IsEnabled="{Binding ActiveTriggers.HasHits}">
+                        <PathIcon Width="15"
+                                  Height="15"
+                                  Data="M13,2 L5,13 L11,13 L9,22 L19,10 L13,10 Z" />
+                        <Button.Flyout>
+                            <Flyout>
+                                <Border Width="240"
+                                        Padding="10"
+                                        Background="{StaticResource NeedleFlyoutBrush}"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6">
+                                    <StackPanel Spacing="8">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock Grid.Column="0"
+                                                       Classes="flyout-title"
+                                                       Text="Triggers" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding ActiveTriggers.CountText}"
+                                                       Foreground="#EF4444"
+                                                       FontWeight="SemiBold"
+                                                       VerticalAlignment="Center" />
+                                        </Grid>
+                                        <TextBlock Text="{Binding ActiveTriggers.SelectedHit.DisplayText}"
+                                                   Foreground="{StaticResource NeedleMutedTextBrush}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <Grid ColumnDefinitions="*,*,*,*"
+                                              ColumnSpacing="6">
+                                            <Button Grid.Column="0"
+                                                    Classes="toolbar-icon-button"
+                                                    HorizontalAlignment="Stretch"
+                                                    ToolTip.Tip="Previous trigger"
+                                                    Command="{Binding PreviousTriggerCommand}">
+                                                <PathIcon Width="15"
+                                                          Height="15"
+                                                          Data="M12,5 L19,12 L17.6,13.4 L13,8.8 L13,21 L11,21 L11,8.8 L6.4,13.4 L5,12 Z" />
+                                            </Button>
+                                            <Button Grid.Column="1"
+                                                    Classes="toolbar-icon-button"
+                                                    HorizontalAlignment="Stretch"
+                                                    ToolTip.Tip="Next trigger"
+                                                    Command="{Binding NextTriggerCommand}">
+                                                <PathIcon Width="15"
+                                                          Height="15"
+                                                          Data="M11,3 L13,3 L13,15.2 L17.6,10.6 L19,12 L12,19 L5,12 L6.4,10.6 L11,15.2 Z" />
+                                            </Button>
+                                            <Button Grid.Column="2"
+                                                    Classes="toolbar-icon-button"
+                                                    HorizontalAlignment="Stretch"
+                                                    ToolTip.Tip="Remove current trigger"
+                                                    Command="{Binding RemoveSelectedTriggerCommand}">
+                                                <PathIcon Width="15"
+                                                          Height="15"
+                                                          Data="M8,6 L8,4 L16,4 L16,6 L20,6 L20,8 L18,8 L17,20 L7,20 L6,8 L4,8 L4,6 Z M9,8 L10,18 L14,18 L15,8 Z" />
+                                            </Button>
+                                            <Button Grid.Column="3"
+                                                    Classes="toolbar-icon-button"
+                                                    HorizontalAlignment="Stretch"
+                                                    ToolTip.Tip="Clear triggers"
+                                                    Command="{Binding ClearTriggersCommand}">
+                                                <PathIcon Width="15"
+                                                          Height="15"
+                                                          Data="M5,5 L19,5 L19,7 L5,7 Z M7,9 L17,9 L17,19 L7,19 Z" />
+                                            </Button>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+
+                    <Border Grid.Column="16"
+                            Width="9"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Stretch">
+                        <Border Width="1"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="{StaticResource NeedleBorderBrush}" />
+                    </Border>
+
+                    <Button Grid.Column="17"
+                            Classes="toolbar-icon-button"
+                            ToolTip.Tip="Navigation">
+                        <PathIcon Width="16"
+                                  Height="16"
+                                  Data="M5,7 L12,3 L19,7 L17.8,8.6 L13,5.9 L13,18.1 L17.8,15.4 L19,17 L12,21 L5,17 L6.2,15.4 L11,18.1 L11,5.9 L6.2,8.6 Z" />
+                        <Button.Flyout>
+                            <Flyout>
+                                <Border Width="210"
+                                        Padding="10"
+                                        Background="{StaticResource NeedleFlyoutBrush}"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="6">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="flyout-title"
+                                                   Margin="4,2,4,6"
+                                                   Text="Navigation" />
+                                        <Button Classes="flyout-action"
+                                                HorizontalAlignment="Stretch"
+                                                Command="{Binding GoToTopCommand}">
+                                            <Grid ColumnDefinitions="Auto,*"
+                                                  HorizontalAlignment="Stretch">
+                                                <PathIcon Width="14"
+                                                          Height="14"
+                                                          Foreground="{StaticResource NeedleMutedTextBrush}"
+                                                          Data="M5,5 L19,5 L19,7 L5,7 Z M12,9 L18,15 L16.6,16.4 L13,12.8 L13,21 L11,21 L11,12.8 L7.4,16.4 L6,15 Z" />
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="10,0,0,0"
+                                                           Text="Top"
+                                                           VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Button>
+                                        <Button Classes="flyout-action"
+                                                HorizontalAlignment="Stretch"
+                                                Command="{Binding PageUpCommand}">
+                                            <Grid ColumnDefinitions="Auto,*"
+                                                  HorizontalAlignment="Stretch">
+                                                <PathIcon Width="14"
+                                                          Height="14"
+                                                          Foreground="{StaticResource NeedleMutedTextBrush}"
+                                                          Data="M12,5 L19,12 L17.6,13.4 L13,8.8 L13,21 L11,21 L11,8.8 L6.4,13.4 L5,12 Z" />
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="10,0,0,0"
+                                                           Text="Page Up"
+                                                           VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Button>
+                                        <Button Classes="flyout-action"
+                                                HorizontalAlignment="Stretch"
+                                                Command="{Binding PageDownCommand}">
+                                            <Grid ColumnDefinitions="Auto,*"
+                                                  HorizontalAlignment="Stretch">
+                                                <PathIcon Width="14"
+                                                          Height="14"
+                                                          Foreground="{StaticResource NeedleMutedTextBrush}"
+                                                          Data="M11,3 L13,3 L13,15.2 L17.6,10.6 L19,12 L12,19 L5,12 L6.4,10.6 L11,15.2 Z" />
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="10,0,0,0"
+                                                           Text="Page Down"
+                                                           VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Button>
+                                        <Button Classes="flyout-action"
+                                                HorizontalAlignment="Stretch"
+                                                Command="{Binding GoToEndCommand}">
+                                            <Grid ColumnDefinitions="Auto,*"
+                                                  HorizontalAlignment="Stretch">
+                                                <PathIcon Width="14"
+                                                          Height="14"
+                                                          Foreground="{StaticResource NeedleMutedTextBrush}"
+                                                          Data="M11,3 L13,3 L13,11.2 L16.6,7.6 L18,9 L12,15 L6,9 L7.4,7.6 L11,11.2 Z M5,17 L19,17 L19,19 L5,19 Z" />
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="10,0,0,0"
+                                                           Text="End"
+                                                           VerticalAlignment="Center" />
+                                            </Grid>
+                                        </Button>
+                                    </StackPanel>
+                                </Border>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Background="{StaticResource NeedleEditorBrush}">
+                <views:LogView />
+            </Border>
+        </Grid>
+    </DockPanel>
+        <views:WindowResizeGripLayer />
+
+        <Border x:Name="StartupOverlay"
+                Background="{StaticResource NeedleWindowBrush}"
+                IsHitTestVisible="False">
+            <Grid>
+                <StackPanel HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Spacing="8">
+                    <TextBlock Text="Needle"
+                               HorizontalAlignment="Center"
+                               Foreground="{StaticResource NeedleTextBrush}"
+                               FontSize="38"
+                               FontWeight="SemiBold" />
+                    <Border Width="92"
+                            Height="2"
+                            HorizontalAlignment="Center"
+                            Background="{StaticResource NeedleAccentBrush}"
+                            CornerRadius="1" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+
+</views:ChromeWindow>
+
+

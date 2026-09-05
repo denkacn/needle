@@ -1,0 +1,161 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Needle.Avalonia.ViewModels"
+             x:Class="Needle.Avalonia.Views.HighlightRulesView"
+             x:DataType="vm:HighlightRulesViewModel">
+    <StackPanel Spacing="18">
+        <StackPanel>
+            <TextBlock Text="Highlight Rules"
+                       Foreground="{DynamicResource NeedleTextBrush}"
+                       FontSize="16"
+                       FontWeight="SemiBold" />
+            <TextBlock Text="{Binding Status}"
+                       Margin="0,4,0,0"
+                       Foreground="{DynamicResource NeedleMutedTextBrush}" />
+        </StackPanel>
+
+        <Grid ColumnDefinitions="*,Auto">
+            <Button Grid.Column="1"
+                    Content="Clear"
+                    Command="{Binding ClearRulesCommand}" />
+        </Grid>
+
+        <Grid ColumnDefinitions="*,88,118,Auto,Auto"
+              ColumnSpacing="8">
+            <TextBox Grid.Column="0"
+                     PlaceholderText="Pattern"
+                     Text="{Binding NewPattern, Mode=TwoWay}" />
+            <Button Grid.Column="1"
+                    ToolTip.Tip="Text color"
+                    Click="OnPickNewForegroundClicked">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Text="Text" />
+                    <Border Width="18"
+                            Height="18"
+                            CornerRadius="3"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource NeedleBorderBrush}"
+                            Background="{Binding NewForeground}" />
+                </StackPanel>
+            </Button>
+            <Grid Grid.Column="2"
+                  ColumnDefinitions="74,24"
+                  HorizontalAlignment="Left">
+                <Button Grid.Column="0"
+                        ToolTip.Tip="Background color"
+                        Click="OnPickNewBackgroundClicked">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="Back" />
+                        <Border Width="18"
+                                Height="18"
+                                CornerRadius="3"
+                                BorderThickness="1"
+                                BorderBrush="{DynamicResource NeedleBorderBrush}"
+                                Background="{Binding NewBackground}" />
+                    </StackPanel>
+                </Button>
+                <Button Grid.Column="1"
+                        Width="24"
+                        Height="28"
+                        Padding="0"
+                        ToolTip.Tip="Reset background"
+                        Click="OnResetNewBackgroundClicked">
+                    <TextBlock Text="X"
+                               FontSize="12"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Button>
+            </Grid>
+            <CheckBox Grid.Column="3"
+                      Content="Regex"
+                      VerticalAlignment="Center"
+                      IsChecked="{Binding NewIsRegex}" />
+            <Button Grid.Column="4"
+                    Content="Add"
+                    Command="{Binding AddRuleCommand}" />
+        </Grid>
+
+        <ItemsControl ItemsSource="{Binding Rules}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="vm:HighlightRuleViewModel">
+                    <Border Margin="0,0,0,8"
+                            Padding="10"
+                            Background="{DynamicResource NeedleItemBrush}"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource NeedleBorderBrush}"
+                            CornerRadius="4">
+                        <Grid ColumnDefinitions="Auto,*,78,106,Auto,Auto"
+                              ColumnSpacing="8">
+                            <CheckBox Grid.Column="0"
+                                      VerticalAlignment="Center"
+                                      IsChecked="{Binding Enabled, Mode=TwoWay}" />
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding Pattern, Mode=TwoWay}" />
+                            <Button Grid.Column="2"
+                                    Tag="{Binding}"
+                                    ToolTip.Tip="Text color"
+                                    Click="OnPickRuleForegroundClicked">
+                                <StackPanel Orientation="Horizontal" Spacing="5">
+                                    <TextBlock Text="T" />
+                                    <Border Width="18"
+                                            Height="18"
+                                            CornerRadius="3"
+                                            BorderThickness="1"
+                                            BorderBrush="{DynamicResource NeedleBorderBrush}"
+                                            Background="{Binding Foreground}" />
+                                </StackPanel>
+                            </Button>
+                            <Grid Grid.Column="3"
+                                  ColumnDefinitions="58,24"
+                                  HorizontalAlignment="Left">
+                                <Button Grid.Column="0"
+                                        Tag="{Binding}"
+                                        ToolTip.Tip="Background color"
+                                        Click="OnPickRuleBackgroundClicked">
+                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                        <TextBlock Text="B" />
+                                        <Border Width="18"
+                                                Height="18"
+                                                CornerRadius="3"
+                                                BorderThickness="1"
+                                                BorderBrush="{DynamicResource NeedleBorderBrush}"
+                                                Background="{Binding Background}" />
+                                    </StackPanel>
+                                </Button>
+                                <Button Grid.Column="1"
+                                        Width="24"
+                                        Height="28"
+                                        Padding="0"
+                                        Tag="{Binding}"
+                                        ToolTip.Tip="Reset background"
+                                        Click="OnResetRuleBackgroundClicked">
+                                    <TextBlock Text="X"
+                                               FontSize="12"
+                                               FontWeight="SemiBold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                </Button>
+                            </Grid>
+                            <CheckBox Grid.Column="4"
+                                      Content="Regex"
+                                      VerticalAlignment="Center"
+                                      IsChecked="{Binding IsRegex, Mode=TwoWay}" />
+                            <Button Grid.Column="5"
+                                    Width="28"
+                                    Height="28"
+                                    Padding="0"
+                                    Tag="{Binding}"
+                                    ToolTip.Tip="Delete rule"
+                                    Click="OnRemoveRuleClicked">
+                                <PathIcon Width="10"
+                                          Height="10"
+                                          Data="M6.4,5 L12,10.6 L17.6,5 L19,6.4 L13.4,12 L19,17.6 L17.6,19 L12,13.4 L6.4,19 L5,17.6 L10.6,12 L5,6.4 Z" />
+                            </Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+</UserControl>

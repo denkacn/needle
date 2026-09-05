@@ -1,0 +1,311 @@
+<views:ChromeWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Needle.Avalonia.ViewModels"
+        xmlns:views="using:Needle.Avalonia.Views"
+        xmlns:converters="using:Needle.Avalonia.Converters"
+        x:Class="Needle.Avalonia.Views.SettingsWindow"
+        x:DataType="vm:MainViewModel"
+        Icon="/Assets/app-icon.ico"
+        Title="Settings"
+        Width="{Binding DisplaySettings.SettingsWindowWidth, Mode=TwoWay}"
+        Height="{Binding DisplaySettings.SettingsWindowHeight, Mode=TwoWay}"
+        MinWidth="520"
+        MinHeight="340"
+        WindowDecorations="None"
+        CanResize="True"
+        Background="{StaticResource NeedleWindowBrush}"
+        SizeChanged="OnWindowSizeChanged">
+
+    <views:ChromeWindow.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedleTopBarBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedlePanelBrush" Color="#242629" />
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleHoverBrush" Color="#383B40" />
+        <SolidColorBrush x:Key="NeedleSectionActiveBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedleItemBrush" Color="#232528" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#8B949E" />
+        <SolidColorBrush x:Key="NeedleAccentBrush" Color="#3574F0" />
+        <converters:HexBrushConverter x:Key="HexBrushConverter" />
+        <DataTemplate x:Key="ColorSwatchTemplate">
+            <StackPanel Orientation="Horizontal"
+                        Spacing="8">
+                <Border Width="16"
+                        Height="16"
+                        CornerRadius="3"
+                        BorderThickness="1"
+                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                        Background="{Binding}" />
+                <TextBlock Text="{Binding}"
+                           Foreground="{StaticResource NeedleTextBrush}"
+                           VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+    </views:ChromeWindow.Resources>
+
+    <views:ChromeWindow.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="NumericUpDown">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </views:ChromeWindow.Styles>
+
+    <Grid Background="{StaticResource NeedleWindowBrush}">
+    <Grid RowDefinitions="38,*"
+          Background="{StaticResource NeedleWindowBrush}">
+        <views:ChromeTitleBar Grid.Row="0"
+                              Title="Settings" />
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="160,*">
+            <Border Grid.Column="0"
+                    Background="{StaticResource NeedlePanelBrush}"
+                    BorderThickness="0,0,1,0"
+                    BorderBrush="{StaticResource NeedleBorderBrush}">
+                <StackPanel Margin="14"
+                            Spacing="8">
+                    <Button x:Name="GeneralSectionButton"
+                            Content="General"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="10,7"
+                            Background="#2B2D30"
+                            Foreground="{StaticResource NeedleTextBrush}"
+                            BorderThickness="0"
+                            CornerRadius="4"
+                            Click="OnGeneralSectionClicked" />
+                    <Button x:Name="HighlightsSectionButton"
+                            Content="Highlights"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Left"
+                            Padding="10,7"
+                            Background="Transparent"
+                            Foreground="{StaticResource NeedleMutedTextBrush}"
+                            BorderThickness="0"
+                            CornerRadius="4"
+                            Click="OnHighlightsSectionClicked" />
+                </StackPanel>
+            </Border>
+
+            <ScrollViewer Grid.Column="1"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+            <Grid>
+            <StackPanel x:Name="GeneralSection"
+                        Margin="24"
+                        Spacing="22">
+                <TextBlock Text="General"
+                           Foreground="{StaticResource NeedleTextBrush}"
+                           FontSize="16"
+                           FontWeight="SemiBold" />
+
+                <Grid ColumnDefinitions="180,*"
+                      RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+                      RowSpacing="14"
+                      ColumnSpacing="16">
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Text="Font"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <Grid Grid.Row="0"
+                          Grid.Column="1"
+                          ColumnDefinitions="*,Auto,Auto"
+                          ColumnSpacing="6">
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding DisplaySettings.LogFontFamilyOptions}"
+                                  SelectedItem="{Binding DisplaySettings.LogFontFamilyName, Mode=TwoWay}" />
+                        <Button Grid.Column="1"
+                                Width="30"
+                                Height="30"
+                                Padding="0"
+                                ToolTip.Tip="Add system font"
+                                Click="OnAddLogFontClicked">
+                            <PathIcon Width="14"
+                                      Height="14"
+                                      Data="M11,5 L13,5 L13,11 L19,11 L19,13 L13,13 L13,19 L11,19 L11,13 L5,13 L5,11 L11,11 Z" />
+                        </Button>
+                        <Button Grid.Column="2"
+                                Width="30"
+                                Height="30"
+                                Padding="0"
+                                ToolTip.Tip="Remove selected custom font"
+                                IsEnabled="{Binding DisplaySettings.CanRemoveSelectedCustomLogFont}"
+                                Click="OnRemoveSelectedLogFontClicked">
+                            <PathIcon Width="14"
+                                      Height="14"
+                                      Data="M8,6 L8,4 L16,4 L16,6 L20,6 L20,8 L18,8 L17,20 L7,20 L6,8 L4,8 L4,6 Z M9,8 L10,18 L14,18 L15,8 Z" />
+                        </Button>
+                    </Grid>
+
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="0"
+                               Text="Font size"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <NumericUpDown Grid.Row="1"
+                                   Grid.Column="1"
+                                   Minimum="8"
+                                   Maximum="32"
+                                   Increment="1"
+                                   FormatString="0"
+                                   Value="{Binding DisplaySettings.LogFontSize, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Row="2"
+                               Grid.Column="0"
+                               Text="Default text color"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <StackPanel Grid.Row="2"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="6">
+                        <Button HorizontalAlignment="Left"
+                                ToolTip.Tip="Default log text color"
+                                Click="OnPickLogTextColorClicked">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="Text" />
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="3"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        Background="{Binding DisplaySettings.LogTextColor}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Width="24"
+                                Height="28"
+                                Padding="0"
+                                ToolTip.Tip="Reset text color"
+                                Click="OnResetLogTextColorClicked">
+                            <TextBlock Text="X"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Button>
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Text="Trigger highlight"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <StackPanel Grid.Row="3"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="6">
+                        <Button HorizontalAlignment="Left"
+                                ToolTip.Tip="Trigger line highlight color"
+                                Click="OnPickTriggerHighlightColorClicked">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="Trigger" />
+                                <Border Width="18"
+                                        Height="18"
+                                        CornerRadius="3"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        Background="{Binding DisplaySettings.TriggerHighlightColor, Converter={StaticResource HexBrushConverter}, ConverterParameter=#4A1F24}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Width="24"
+                                Height="28"
+                                Padding="0"
+                                ToolTip.Tip="Reset trigger highlight"
+                                Click="OnResetTriggerHighlightColorClicked">
+                            <TextBlock Text="X"
+                                       FontSize="12"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Button>
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="4"
+                               Grid.Column="0"
+                               Text="Always on top"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <CheckBox Grid.Row="4"
+                              Grid.Column="1"
+                              IsChecked="{Binding DisplaySettings.IsAlwaysOnTop, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Row="5"
+                               Grid.Column="0"
+                               Text="Auto Follow Tail"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <CheckBox Grid.Row="5"
+                              Grid.Column="1"
+                              IsChecked="{Binding DisplaySettings.IsAutoFollowTailEnabled, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Row="6"
+                               Grid.Column="0"
+                               Text="Mini-map"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <CheckBox Grid.Row="6"
+                              Grid.Column="1"
+                              IsChecked="{Binding DisplaySettings.IsMiniMapEnabled, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Row="7"
+                               Grid.Column="0"
+                               Text="Structured mode"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <CheckBox Grid.Row="7"
+                              Grid.Column="1"
+                              IsChecked="{Binding Document.IsStructuredMode, Mode=TwoWay}" />
+
+                    <TextBlock Grid.Row="8"
+                               Grid.Column="0"
+                               Text="Settings file"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    <StackPanel Grid.Row="8"
+                                Grid.Column="1"
+                                Orientation="Horizontal"
+                                Spacing="8">
+                        <Button Content="Export"
+                                MinWidth="86"
+                                Padding="12,6"
+                                Click="OnExportSettingsClicked" />
+                        <Button Content="Import"
+                                MinWidth="86"
+                                Padding="12,6"
+                                Click="OnImportSettingsClicked" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+
+            <StackPanel x:Name="HighlightsSection"
+                        Margin="24"
+                        Spacing="18"
+                        IsVisible="False">
+                <views:HighlightRulesView DataContext="{Binding Highlights}" />
+            </StackPanel>
+            </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+        <views:WindowResizeGripLayer />
+    </Grid>
+</views:ChromeWindow>
+
+

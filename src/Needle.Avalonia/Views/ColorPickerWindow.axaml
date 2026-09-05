@@ -1,0 +1,73 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Needle.Avalonia.Controls"
+        x:Class="Needle.Avalonia.Views.ColorPickerWindow"
+        Icon="/Assets/app-icon.ico"
+        Title="Choose Color"
+        Width="500"
+        Height="520"
+        MinWidth="420"
+        MinHeight="460"
+        Background="#4B4B4B">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#E5E7EB" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#B9C0C8" />
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="*,Auto"
+          Margin="8"
+          RowSpacing="12">
+        <Grid Grid.Row="0"
+              ColumnDefinitions="*,28"
+              ColumnSpacing="18">
+            <controls:ColorFieldControl x:Name="ColorField"
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        MinHeight="360"
+                                        ColorChanged="OnColorFieldChanged" />
+            <controls:HueSliderControl x:Name="HueSlider"
+                                       Grid.Column="1"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       HueChanged="OnHueChanged" />
+        </Grid>
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="Auto,*,Auto,Auto"
+              ColumnSpacing="10">
+            <Border x:Name="PreviewSwatch"
+                    Grid.Column="0"
+                    Width="32"
+                    Height="32"
+                    CornerRadius="4"
+                    BorderThickness="1"
+                    BorderBrush="{StaticResource NeedleBorderBrush}" />
+            <TextBox x:Name="HexText"
+                     Grid.Column="1"
+                     VerticalAlignment="Center"
+                     TextChanged="OnHexTextChanged" />
+            <Button Grid.Column="2"
+                    Content="Cancel"
+                    Click="OnCancelClicked" />
+            <Button Grid.Column="3"
+                    Content="OK"
+                    Click="OnOkClicked" />
+        </Grid>
+    </Grid>
+</Window>

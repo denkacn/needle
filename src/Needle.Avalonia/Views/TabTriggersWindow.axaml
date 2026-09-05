@@ -1,0 +1,111 @@
+<views:ChromeWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Needle.Avalonia.ViewModels"
+        xmlns:views="using:Needle.Avalonia.Views"
+        x:Class="Needle.Avalonia.Views.TabTriggersWindow"
+        x:DataType="vm:TriggerRulesViewModel"
+        Icon="/Assets/app-icon.ico"
+        Title="Tab Triggers"
+        Width="620"
+        Height="430"
+        MinWidth="520"
+        MinHeight="340"
+        WindowDecorations="None"
+        CanResize="True"
+        Background="{StaticResource NeedleWindowBrush}">
+
+    <views:ChromeWindow.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedleTopBarBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedleItemBrush" Color="#232528" />
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleHoverBrush" Color="#383B40" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#8B949E" />
+        <SolidColorBrush x:Key="NeedleAccentBrush" Color="#3574F0" />
+    </views:ChromeWindow.Resources>
+
+    <views:ChromeWindow.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </views:ChromeWindow.Styles>
+
+    <Grid Background="{StaticResource NeedleWindowBrush}">
+        <Grid RowDefinitions="38,*"
+              Background="{StaticResource NeedleWindowBrush}">
+            <views:ChromeTitleBar Grid.Row="0"
+                                  Title="Tab Triggers" />
+
+            <ScrollViewer Grid.Row="1"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="24"
+                            Spacing="18">
+                    <StackPanel>
+                        <TextBlock Text="Trigger Rules"
+                                   Foreground="{StaticResource NeedleTextBrush}"
+                                   FontSize="16"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding Status}"
+                                   Margin="0,4,0,0"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}" />
+                    </StackPanel>
+
+                    <Grid ColumnDefinitions="*,Auto"
+                          ColumnSpacing="8">
+                        <TextBox Grid.Column="0"
+                                 Height="32"
+                                 PlaceholderText="Text trigger"
+                                 Text="{Binding PendingPattern, Mode=TwoWay}" />
+                        <Button Grid.Column="1"
+                                MinWidth="70"
+                                Content="Add"
+                                Command="{Binding AddRuleCommand}" />
+                    </Grid>
+
+                    <ItemsControl ItemsSource="{Binding Rules}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="vm:TriggerRuleViewModel">
+                                <Border Margin="0,0,0,8"
+                                        Padding="10"
+                                        Background="{StaticResource NeedleItemBrush}"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource NeedleBorderBrush}"
+                                        CornerRadius="4">
+                                    <Grid ColumnDefinitions="*,Auto"
+                                          ColumnSpacing="8">
+                                        <TextBox Grid.Column="0"
+                                                 Text="{Binding Pattern, Mode=TwoWay}" />
+                                        <Button Grid.Column="1"
+                                                Width="30"
+                                                Height="30"
+                                                Padding="0"
+                                                ToolTip.Tip="Delete trigger rule"
+                                                Command="{Binding RemoveCommand}">
+                                            <PathIcon Width="10"
+                                                      Height="10"
+                                                      Data="M6.4,5 L12,10.6 L17.6,5 L19,6.4 L13.4,12 L19,17.6 L17.6,19 L12,13.4 L6.4,19 L5,17.6 L10.6,12 L5,6.4 Z" />
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Button HorizontalAlignment="Right"
+                            Content="Clear rules"
+                            Command="{Binding ClearRulesCommand}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <views:WindowResizeGripLayer />
+    </Grid>
+</views:ChromeWindow>

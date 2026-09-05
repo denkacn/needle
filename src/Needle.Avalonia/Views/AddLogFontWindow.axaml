@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Needle.Avalonia.ViewModels"
+        x:Class="Needle.Avalonia.Views.AddLogFontWindow"
+        x:DataType="vm:AddLogFontViewModel"
+        Icon="/Assets/app-icon.ico"
+        Title="Add Font"
+        Width="420"
+        Height="520"
+        MinWidth="360"
+        MinHeight="420"
+        Background="{StaticResource NeedleWindowBrush}">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedlePanelBrush" Color="#242629" />
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#8B949E" />
+    </Window.Resources>
+
+    <Window.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="ListBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </Window.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto"
+          Margin="18"
+          RowSpacing="12">
+        <TextBlock Grid.Row="0"
+                   Text="Add Font"
+                   FontSize="16"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource NeedleTextBrush}" />
+
+        <TextBox Grid.Row="1"
+                 PlaceholderText="Search system fonts"
+                 Text="{Binding SearchText, Mode=TwoWay}" />
+
+        <Border Grid.Row="2"
+                Background="{StaticResource NeedlePanelBrush}"
+                BorderBrush="{StaticResource NeedleBorderBrush}"
+                BorderThickness="1"
+                CornerRadius="4">
+            <ListBox ItemsSource="{Binding FilteredFontNames}"
+                     SelectedItem="{Binding SelectedFontName, Mode=TwoWay}"
+                     DoubleTapped="OnFontDoubleTapped" />
+        </Border>
+
+        <Grid Grid.Row="3"
+              ColumnDefinitions="*,Auto,Auto"
+              ColumnSpacing="8">
+            <TextBlock Grid.Column="0"
+                       Text="{Binding SelectedFontName}"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource NeedleMutedTextBrush}" />
+            <Button Grid.Column="1"
+                    Content="Cancel"
+                    Click="OnCancelClicked" />
+            <Button Grid.Column="2"
+                    Content="OK"
+                    IsEnabled="{Binding CanAccept}"
+                    Click="OnOkClicked" />
+        </Grid>
+    </Grid>
+</Window>

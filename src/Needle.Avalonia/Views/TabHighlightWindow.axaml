@@ -1,0 +1,56 @@
+<views:ChromeWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Needle.Avalonia.ViewModels"
+        xmlns:views="using:Needle.Avalonia.Views"
+        x:Class="Needle.Avalonia.Views.TabHighlightWindow"
+        x:DataType="vm:HighlightRulesViewModel"
+        Icon="/Assets/app-icon.ico"
+        Title="Tab Highlight Rules"
+        Width="760"
+        Height="520"
+        MinWidth="620"
+        MinHeight="420"
+        WindowDecorations="None"
+        CanResize="True"
+        Background="{StaticResource NeedleWindowBrush}">
+
+    <views:ChromeWindow.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedleTopBarBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedleItemBrush" Color="#232528" />
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#1E1F22" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleHoverBrush" Color="#383B40" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#8B949E" />
+    </views:ChromeWindow.Resources>
+
+    <views:ChromeWindow.Styles>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource NeedleBorderBrush}" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+    </views:ChromeWindow.Styles>
+
+    <Grid Background="{StaticResource NeedleWindowBrush}">
+        <Grid RowDefinitions="38,*"
+              Background="{StaticResource NeedleWindowBrush}">
+            <views:ChromeTitleBar Grid.Row="0"
+                                  Title="Tab Highlight Rules" />
+
+            <ScrollViewer Grid.Row="1"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+                <views:HighlightRulesView Margin="24" />
+            </ScrollViewer>
+        </Grid>
+        <views:WindowResizeGripLayer />
+    </Grid>
+</views:ChromeWindow>
+
+

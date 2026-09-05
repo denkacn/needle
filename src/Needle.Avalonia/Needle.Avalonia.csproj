@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Needle</AssemblyName>
+    <Title>Needle</Title>
+    <Product>Needle</Product>
+    <Version>0.9.24</Version>
+    <AssemblyVersion>0.9.24.0</AssemblyVersion>
+    <FileVersion>0.9.24.0</FileVersion>
+    <InformationalVersion>0.9.24</InformationalVersion>
+    <Description>Needle local log viewer</Description>
+    <RootNamespace>Needle.Avalonia</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <ApplicationIcon>Assets\app-icon.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Needle.Avalonia.Tests" />
+    <Folder Include="Models\" />
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.1" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="NetSparkleUpdater.SparkleUpdater" Version="3.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Needle.Application\Needle.Application.csproj" />
+    <ProjectReference Include="..\Needle.Infrastructure\Needle.Infrastructure.csproj" />
+    <ProjectReference Include="..\Needle.Parsers\Needle.Parsers.csproj" />
+  </ItemGroup>
+</Project>

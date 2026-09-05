@@ -1,0 +1,102 @@
+<views:ChromeWindow xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:views="using:Needle.Avalonia.Views"
+                    x:Class="Needle.Avalonia.Views.AboutWindow"
+                    Icon="/Assets/app-icon.ico"
+                    Title="About Needle"
+                    Width="440"
+                    Height="330"
+                    MinWidth="400"
+                    MinHeight="300"
+                    WindowDecorations="None"
+                    CanResize="False"
+                    Background="{StaticResource NeedleWindowBrush}">
+
+    <views:ChromeWindow.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedleTopBarBrush" Color="#2B2D30" />
+        <SolidColorBrush x:Key="NeedlePanelBrush" Color="#242629" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleHoverBrush" Color="#383B40" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleMutedTextBrush" Color="#8B949E" />
+        <SolidColorBrush x:Key="NeedleAccentBrush" Color="#3574F0" />
+    </views:ChromeWindow.Resources>
+
+    <views:ChromeWindow.Styles>
+        <Style Selector="Button.link-button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleAccentBrush}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+        <Style Selector="Button.link-button:pointerover">
+            <Setter Property="Foreground" Value="#6EA1FF" />
+        </Style>
+    </views:ChromeWindow.Styles>
+
+    <Grid RowDefinitions="38,*"
+          Background="{StaticResource NeedleWindowBrush}">
+        <views:ChromeTitleBar Grid.Row="0"
+                              Title="About Needle"
+                              ShowMaximizeButton="False" />
+
+        <Border Grid.Row="1"
+                Margin="18"
+                Padding="18"
+                CornerRadius="6"
+                Background="{StaticResource NeedlePanelBrush}"
+                BorderThickness="1"
+                BorderBrush="{StaticResource NeedleBorderBrush}">
+            <Grid RowDefinitions="Auto,*,Auto">
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            Spacing="14">
+                    <Image Source="/Assets/app-icon.png"
+                           Width="64"
+                           Height="64" />
+                    <StackPanel VerticalAlignment="Center"
+                                Spacing="4">
+                        <TextBlock Text="Needle"
+                                   Foreground="{StaticResource NeedleTextBrush}"
+                                   FontSize="24"
+                                   FontWeight="SemiBold" />
+                        <TextBlock x:Name="VersionText"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}"
+                                   FontSize="13" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1"
+                            Margin="0,22,0,0"
+                            Spacing="11">
+                    <Grid ColumnDefinitions="72,*">
+                        <TextBlock Grid.Column="0"
+                                   Text="Website"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}" />
+                        <Button Grid.Column="1"
+                                Classes="link-button"
+                                Content="https://needle.bypuziki.com/"
+                                Click="OnWebsiteClicked" />
+                    </Grid>
+                    <Grid ColumnDefinitions="72,*">
+                        <TextBlock Grid.Column="0"
+                                   Text="Email"
+                                   Foreground="{StaticResource NeedleMutedTextBrush}" />
+                        <Button Grid.Column="1"
+                                Classes="link-button"
+                                Content="needle@bypuziki.com"
+                                Click="OnEmailClicked" />
+                    </Grid>
+                </StackPanel>
+
+                <TextBlock Grid.Row="2"
+                           Text="© 2026 ByPuziki. All rights reserved."
+                           Foreground="{StaticResource NeedleMutedTextBrush}"
+                           FontSize="12" />
+            </Grid>
+        </Border>
+    </Grid>
+</views:ChromeWindow>

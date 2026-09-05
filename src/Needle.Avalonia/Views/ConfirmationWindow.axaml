@@ -1,0 +1,61 @@
+<views:ChromeWindow xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="using:Needle.Avalonia.Views"
+        x:Class="Needle.Avalonia.Views.ConfirmationWindow"
+        x:Name="Root"
+        Icon="/Assets/app-icon.ico"
+        Title="Confirm"
+        Width="420"
+        Height="190"
+        MinWidth="360"
+        MinHeight="170"
+        WindowDecorations="None"
+        CanResize="False"
+        Background="{StaticResource NeedleWindowBrush}">
+
+    <views:ChromeWindow.Resources>
+        <SolidColorBrush x:Key="NeedleWindowBrush" Color="#1F2023" />
+        <SolidColorBrush x:Key="NeedlePanelBrush" Color="#242629" />
+        <SolidColorBrush x:Key="NeedleControlBrush" Color="#34373D" />
+        <SolidColorBrush x:Key="NeedleControlHoverBrush" Color="#41454D" />
+        <SolidColorBrush x:Key="NeedleBorderBrush" Color="#373A40" />
+        <SolidColorBrush x:Key="NeedleTextBrush" Color="#C9D1D9" />
+        <SolidColorBrush x:Key="NeedleAccentBrush" Color="#3574F0" />
+    </views:ChromeWindow.Resources>
+
+    <views:ChromeWindow.Styles>
+        <Style Selector="Button.dialog-button">
+            <Setter Property="Height" Value="30" />
+            <Setter Property="MinWidth" Value="86" />
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="CornerRadius" Value="4" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.dialog-primary">
+            <Setter Property="Background" Value="{StaticResource NeedleAccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+        </Style>
+        <Style Selector="Button.dialog-secondary">
+            <Setter Property="Background" Value="{StaticResource NeedleControlBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource NeedleTextBrush}" />
+        </Style>
+        <Style Selector="Button.dialog-secondary:pointerover">
+            <Setter Property="Background" Value="{StaticResource NeedleControlHoverBrush}" />
+        </Style>
+    </views:ChromeWindow.Styles>
+
+    <Grid RowDefinitions="38,*" Background="{StaticResource NeedleWindowBrush}">
+        <views:ChromeTitleBar Grid.Row="0" Title="{Binding #Root.Title}" />
+        <Border Grid.Row="1" Padding="22,18" Background="{StaticResource NeedlePanelBrush}" BorderThickness="0,1,0,0" BorderBrush="{StaticResource NeedleBorderBrush}">
+            <Grid RowDefinitions="*,Auto">
+                <TextBlock x:Name="MessageText" Grid.Row="0" TextWrapping="Wrap" Foreground="{StaticResource NeedleTextBrush}" FontSize="14" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+                    <Button Classes="dialog-button dialog-secondary" Content="Cancel" Click="OnCancelClicked" />
+                    <Button x:Name="ConfirmButton" Classes="dialog-button dialog-primary" Click="OnConfirmClicked" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</views:ChromeWindow>

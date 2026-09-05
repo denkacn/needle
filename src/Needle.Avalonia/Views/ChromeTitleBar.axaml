@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Needle.Avalonia.Views.ChromeTitleBar"
+             x:Name="Root">
+    <Border Height="38"
+            Background="{StaticResource NeedleTopBarBrush}"
+            BorderThickness="0,0,0,1"
+            BorderBrush="{StaticResource NeedleBorderBrush}">
+        <Grid ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Grid.Column="0"
+                       Text="{Binding Title, ElementName=Root}"
+                       Margin="14,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource NeedleTextBrush}"
+                       FontSize="13"
+                       FontWeight="SemiBold"
+                       PointerPressed="OnTitleBarPointerPressed" />
+            <Border Grid.Column="1"
+                    Background="Transparent"
+                    PointerPressed="OnTitleBarPointerPressed" />
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal">
+                <Button Classes="chrome-button"
+                        ToolTip.Tip="Minimize"
+                        Click="OnMinimizeClicked">
+                    <PathIcon Width="12"
+                              Height="12"
+                              Data="M4,11 L20,11 L20,13 L4,13 Z" />
+                </Button>
+                <Button Classes="chrome-button"
+                        ToolTip.Tip="Maximize"
+                        IsVisible="{Binding ShowMaximizeButton, ElementName=Root}"
+                        Click="OnMaximizeClicked">
+                    <PathIcon Width="12"
+                              Height="12"
+                              Data="M6,6 L18,6 L18,18 L6,18 Z M8,8 L8,16 L16,16 L16,8 Z" />
+                </Button>
+                <Button Classes="chrome-button close-button"
+                        ToolTip.Tip="Close"
+                        Click="OnCloseWindowClicked">
+                    <PathIcon Width="12"
+                              Height="12"
+                              Data="M6.4,5 L12,10.6 L17.6,5 L19,6.4 L13.4,12 L19,17.6 L17.6,19 L12,13.4 L6.4,19 L5,17.6 L10.6,12 L5,6.4 Z" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>

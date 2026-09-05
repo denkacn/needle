@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Needle.Avalonia.ViewModels"
+             x:Class="Needle.Avalonia.Views.LogTabsView"
+             x:DataType="vm:MainViewModel">
+    <Border Padding="0"
+            Background="{DynamicResource NeedleTabBarBrush}"
+            BorderThickness="0,0,0,1"
+            BorderBrush="{DynamicResource NeedleBorderBrush}">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Disabled">
+            <ItemsControl ItemsSource="{Binding Tabs}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="vm:LogTabViewModel">
+                        <Border Classes="editor-tab"
+                                Width="140"
+                                Classes.active="{Binding IsActive}">
+                            <Grid RowDefinitions="*,3">
+                                <Button Grid.Row="0"
+                                        Classes="editor-tab-title"
+                                        HorizontalAlignment="Stretch"
+                                        Tag="{Binding}"
+                                        ToolTip.Tip="{Binding Path}"
+                                        Click="OnTabClicked">
+                                    <Grid ColumnDefinitions="Auto,Auto,*,Auto"
+                                          ColumnSpacing="7">
+                                        <Ellipse Grid.Column="0"
+                                                 Width="7"
+                                                 Height="7"
+                                                 Fill="#EF4444"
+                                                 VerticalAlignment="Center"
+                                                 IsVisible="{Binding HasTriggeredHits}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="LOG"
+                                                   Foreground="#62A36C"
+                                                   FontSize="11"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"
+                                                   IsVisible="{Binding !HasCustomHighlights}" />
+                                        <StackPanel Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center"
+                                                    IsVisible="{Binding HasCustomHighlights}">
+                                            <TextBlock Text="L"
+                                                       Foreground="#EF4444"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold" />
+                                            <TextBlock Text="O"
+                                                       Foreground="#22C55E"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold" />
+                                            <TextBlock Text="G"
+                                                       Foreground="#3B82F6"
+                                                       FontSize="11"
+                                                       FontWeight="SemiBold" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding Title}"
+                                                   Foreground="{DynamicResource NeedleTextBrush}"
+                                                   FontSize="13"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center" />
+                                        <Button Grid.Column="3"
+                                                Classes="editor-tab-close"
+                                                Tag="{Binding}"
+                                                ToolTip.Tip="Close tab"
+                                                Click="OnCloseTabClicked">
+                                            <PathIcon Width="9"
+                                                      Height="9"
+                                                      Data="M6.4,5 L12,10.6 L17.6,5 L19,6.4 L13.4,12 L19,17.6 L17.6,19 L12,13.4 L6.4,19 L5,17.6 L10.6,12 L5,6.4 Z" />
+                                        </Button>
+                                    </Grid>
+                                </Button>
+                                <Border Grid.Row="1"
+                                        Height="3"
+                                        Background="{DynamicResource NeedleAccentBrush}"
+                                        IsVisible="{Binding IsActive}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Border>
+</UserControl>

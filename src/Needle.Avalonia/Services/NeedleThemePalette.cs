@@ -1,0 +1,26 @@
+namespace Needle.Avalonia.Services;
+
+internal sealed record NeedleThemePalette(
+    string Window,
+    string TopBar,
+    string TabBar,
+    string Panel,
+    string Border,
+    string Control,
+    string Editor,
+    string Hover,
+    string ThemeButton,
+    string ThemeButtonHover,
+    string TabActive,
+    string Flyout,
+    string FlyoutSecondary,
+    string FlyoutPrimaryHover,
+    string LogSelectedLine,
+    string LogTextSelection,
+    string LogBookmark,
+    string SectionActive,
+    string Item,
+    string Text,
+    string MutedText,
+    string Accent,
+    string DefaultLogText);
